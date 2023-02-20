@@ -1,35 +1,35 @@
-function c = biseccion_tol_sol(f, a, b, err)
-% Funcion que permite calcular de manera aproximada una raiz de una funcion 
-% dado un intervalo (a, b) que la contenga.
-% El algoritmo utilizado es el Metodo de la biseccion.
+function [xs, i] = biseccion_tol_sol(y, a, b, ermax)
+% Función que permite calcular de manera aproximada una raíz de una función 
+% dado un intervalo (a, b) que la contenga
+% El algoritmo utilizado es el Método de la bisección
 % Inputs: 
-% f = funcion anonima que devuelve un unico valor numerico [@()]
-% a, b = extremos del intervalo donde se encuentre la solucion [num]
-% err = error [float]
+% y = función en forma anónima
+% a = extremo menor del intervalo
+% b = extremo mayor del intervalo
+% ermax = error máximo admitido 
 % Outputs:
-% c = raiz aproximada
-% El error se utilizara de forma que el algoritmo se detenga cuando la 
-% mitad del intervalo de busqueda sea menor que este.
-    % Comprobamos que el intervalo dado contiene una raiz
-    if f(a)*f(b) < 0
-        % Inicializacion de variables
-        c = (a+b) / 2;
-        it = 0;
-        fc = f(c);
-        err_it = abs((b-a)/2); % Error de la iteracion
-        while(err_it > err && fc ~= 0)
-            % Si el producto de imagenes da negativo intercambiaremos el
+% xs = raíz calculada
+% i = número de iteraciones
+% El error se calculará como el valor absoluto de la mitad del ancho del 
+% intervalo de búsqueda
+    % Comprobamos que el intervalo dado contiene una raíz
+    if y(a)*y(b) < 0
+        % Inicialización de variables
+        xs = (a+b) / 2;
+        i = 1;
+        ys = y(xs);
+        while abs((b-a)/2) > ermax && ys ~= 0
+            % Si el producto de imágenes da negativo intercambiaremos el
             % extremo del intervalo que corresponda con el punto medio
-            % convergiendo a la raiz al reducir el rango de busqueda.
-            if f(a) * fc < 0
-                b = c;
+            % convergiendo a la raiz al reducir el rango de búsqueda.
+            if y(a) * ys < 0
+                b = xs;
             else
-                a = c;
+                a = xs;
             end
-            c = (a+b) / 2;
-            fc = f(c);
-            it = it + 1;
-            err_it = abs((b-a)/2);
+            xs = (a+b) / 2;
+            ys = y(xs);
+            i = i + 1;
         end
     else
         disp("Este intervalo no contiene raices.")

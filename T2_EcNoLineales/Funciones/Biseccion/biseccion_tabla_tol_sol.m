@@ -1,66 +1,66 @@
-function c = biseccion_tabla_tol_sol(f, a, b, err)
-% Funcion que permite calcular de manera aproximada una raiz de una funcion 
-% dado un intervalo (a, b) que la contenga, y que muestra los resultados 
-% mediante una tabla.
-% El algoritmo utilizado es el Metodo de la biseccion.
+function [xs, i] = biseccion_tabla_tol_sol(y, a, b, ermax)
+% Función que permite calcular de manera aproximada una raíz de una función 
+% dado un intervalo (a, b) que la contenga y que muestra en una tabla los
+% valores de cada iteración.
+% El algoritmo utilizado es el Método de la bisección
 % Inputs: 
-% f = funcion anonima que devuelve un unico valor numerico [@()]
-% a, b = extremos del intervalo donde se encuentre la solucion [num]
-% err = error [float]
+% y = función en forma anónima
+% a = extremo menor del intervalo
+% b = extremo mayor del intervalo
+% ermax = error máximo admitido 
 % Outputs:
-% c = raiz aproximada [float]
-% El error se utilizara de forma que el algoritmo se detenga cuando la 
-% mitad del intervalo de busqueda sea menor que este.
+% xs = raíz calculada
+% i = número de iteraciones
+% El error se calculará como el valor absoluto de la mitad del ancho del 
+% intervalo de búsqueda
 % -----------------------------ALGORITMO-----------------------------------
     % Comprobamos que el intervalo dado contiene una raiz
-    if f(a)*f(b) < 0  
-        % Inicializacion de variables
-        c = (a+b) / 2;
-        it = 0;
-        fc = f(c);
+    if y(a)*y(b) < 0  
+        % Inicialización de variables
+        xs = (a+b) / 2;
+        i = 1;
+        ys = y(xs);
         err_it = abs((b-a)/2); % Error de la iteracion
-        % Matriz con la iteracion 0 (almacenara valores de las iteraciones)
-        res = [it, a, b, c, fc, err_it]; 
-        while err_it > err && fc ~= 0
+        % Matriz con la iteración 1 (almacenará valores de las iteraciones)
+        res = [i, a, b, xs, ys, err_it];
+        while err_it > ermax && ys ~= 0
             % Si el producto de imagenes da negativo intercambiaremos el
             % extremo del intervalo que corresponda con el punto medio
-            % convergiendo a la raiz al reducir el rango de busqueda.
-            if f(a) * fc < 0
-                b = c;
+            % convergiendo a la raíz al reducir el rango de busqueda
+            if y(a) * ys < 0
+                b = xs;
             else
-                a = c;
+                a = xs;
             end
-            c = (a+b) / 2;
-            fc = f(c);
-            it = it + 1;
+            xs = (a+b) / 2;
+            ys = y(xs);
+            i = i + 1;
             err_it = abs((b-a)/2);
-            % Añadimos al final de la matriz res los resultados.
-            % Somos conscientes de que no es optimo redimensionar,
-            % permitira mostrar de manera muy visual los resultados.
-            res(end+1, :) = [it, a, b, c, fc, err_it]; 
-        end
-% -------------------------------------------------------------------------       
-
-% ------------------------------PRESENTACION-------------------------------
-        % Operaciones para formatear a la precision del error
-        if err < 1
-            % Sacamos el numero de decimales de precision
-            % Coincide con el |exp| de la notacion cientifica del error + 1 
+            % Añadimos al final de la matriz res los resultados
+            % Somos conscientes de que no es óptimo redimensionar 
+            % Pero permitirá mostrar de manera muy visual los resultados
+            res(end+1, :) = [i, a, b, xs, ys, err_it]; 
+        end       
+% ------------------------------PRESENTACIÓN-------------------------------
+        % Operaciones para formatear a la precisión del error
+        if err_it < 1
+            % Sacamos el número de decimales de precisión
+            % Coincide con el |exp| de la notación científica del error + 1 
             % Y guardamos el formato para los datos de la tabla output
-            f_precision = abs(floor(log10(err)));
+            f_precision = abs(floor(log10(ermax)));
             f_precision = strcat('%.', num2str(f_precision+1), 'f');
         else
             f_precision = strcat('%f');
         end
-        % Tabla con los valores de cada iteracion formateados
+        % Tabla con los valores de cada iteración formateados
         tabla_resultados = table( ...
-            res(:, 1), ... % numero de iteracion
+            res(:, 1), ... % número de iteración
             num2str(res(:, 2), f_precision), ... % extremo inferior
             num2str(res(:, 3), f_precision), ... % extremo superior
             num2str(res(:, 4), f_precision), ... % punto medio
             num2str(res(:, 5), f_precision), ... % imagen punto medio
-            num2str(res(:, 6), f_precision), ... % error de la iteracion
-            VariableNames={'It', 'a', 'b', 'c', 'f(c)', 'Error'});
+            num2str(res(:, 6), f_precision), ... % error de la iteración
+            VariableNames={'It', 'a', 'b', 'xs', 'f(xs)', 'Error'});
         disp(tabla_resultados)
 % -------------------------------------------------------------------------
     else
