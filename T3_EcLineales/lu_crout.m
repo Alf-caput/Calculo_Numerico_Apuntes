@@ -20,23 +20,12 @@ function [L, U] = lu_crout(A)
             end
             L(i, j) = A(i, j) - res;
         end
-        res = 0;
-%         for j = f-i: -1: 1 % j = número de U a obtener en la fila
         for j = 2: f-i+1 % nº de iteraciones = nº de U a obtener en la fila
+            res = 0;
             for k = 1: i-1 % número de restas en numerador para obtener U
                 res = res + L(i, k)*U(k, j+1);
             end
             U(i, j+1) = (A(i, j+1) - res) / L(i, i);
         end
     end
-
-
-
-%     for j = 1: f-1
-%         for i = j + 1: f
-%             mul = A(i, j) / A(j, j); % multiplicadores método Gauss
-%             A(i, j:c) = A(i, j:c) -  mul * A(j, j:c);
-%             L(i, j) = mul;
-%         end
-%     end
 end
