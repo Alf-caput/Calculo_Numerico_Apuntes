@@ -12,9 +12,9 @@ function x = gauss_pivoteo_parcial(A, b)
     [f, c] = size(Ab);
     for j = 1: f-1
         % Hallamos el pivote que tiene valor absoluto mayor
-        [~, pos] = max(abs(Ab(:, j)));
-        % Intercambiamos filas (fila j por fila pos)
-        Ab([j, pos], :) = Ab([pos, j], :);
+        [~, pos] = max(abs(Ab(j:f, j)));
+        % Intercambiamos filas
+        Ab([j, pos+j-1], :) = Ab([pos+j-1, j], :);
         for i = j + 1: f
             % Se hace ceros debajo del pivote, para ello a las filas de la
             % j+1 a la f se les resta la fila pivote dividida por el pivote
