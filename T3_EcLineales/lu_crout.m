@@ -15,9 +15,6 @@ function [L, U] = lu_crout(A)
     for i = 2: f % 
         for j = 2: i % número de L
             res = 0;
-            for k = 1: j-1 % número de restas para obtener L
-                res = res - L(j, k) * U(k, j);
-            end
             L(i, j) = A(i, j) - L(j, k) * U(k, j);
         end
     end
