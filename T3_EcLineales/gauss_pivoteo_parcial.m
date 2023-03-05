@@ -1,4 +1,4 @@
-function x = gauss_pivoteo(A, b)
+function x = gauss_pivoteo_parcial(A, b)
 % Función que permite calcular la solución aproximada de un sistema lineal.
 % El algoritmo utilizado es el Método de Gauss con pivoteo.
 % Inputs: 
@@ -20,7 +20,6 @@ function x = gauss_pivoteo(A, b)
             % j+1 a la f se les resta la fila pivote dividida por el pivote
             % y multiplicada por el primer coeficiente no nulo de estas
             Ab(i, j:c) = Ab(i, j:c) -  Ab(i, j) / Ab(j, j) * Ab(j, j:c);
-            disp(Ab)
         end
     end
     x = zeros(f, 1);
