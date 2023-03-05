@@ -12,9 +12,9 @@ function x = gauss_jordan(A, b)
     [f, c] = size(Ab);
     for j = 1: f
         % Hallamos el pivote que tiene valor absoluto mayor
-        [pivote, pos] = max(abs(Ab(:, j)));
+        [pivote, pos] = max(abs(Ab(j:f, j)));
         % Intercambiamos filas para mayor pivote
-        Ab([j, pos], :) = Ab([pos, j], :);
+        Ab([j, pos+j-1], :) = Ab([pos+j-1, j], :);
         % Se normaliza la ecuación pivotante
         Ab(j, j:c) = Ab(j, j:c) /  pivote;
         % Se hace ceros encima del pivote
